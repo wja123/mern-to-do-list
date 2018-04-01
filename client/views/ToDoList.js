@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-// import { Row, Col, Input, Button, Icon } from 'react-materialize'
+import { ToDoAdd } from '../components/ToDoAdd'
+import { ToDoTable } from '../components/ToDoTable'
 
 class ToDoList extends Component {
   constructor (props) {
@@ -8,8 +9,12 @@ class ToDoList extends Component {
   }
   render () {
     return (
-      <div style={{ display: 'flex', flex: 1, height: '100%', width: '100%', backgroundColor: 'lightblue' }}>
-        <h1>TESTING!</h1>
+      <div style={{ display: 'flex', flex: 1, height: '100%', width: '100%', alignItems: 'center', flexDirection: 'column' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'center', background: 'coral' }}>
+          <h1 style={{ fontWeight: 200, color: 'white' }}>To Do list</h1>
+        </div>
+        <ToDoAdd />
+        <ToDoTable />
       </div>
     )
   }
