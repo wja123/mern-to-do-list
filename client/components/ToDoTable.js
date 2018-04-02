@@ -7,7 +7,7 @@ import { TableRowEdit } from './TableRowEdit'
 
 export const ToDoTable = (props) => {
   return (
-    <div style={{ display: 'flex', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+    <div style={{ display: 'flex', flex: 1, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
       <div style={{ display: 'flex', width: '80%', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
         <Table style={{justifyContent: 'center', alignItems: 'center', textAlign: 'center'}}>
           <thead>
@@ -30,6 +30,7 @@ export const ToDoTable = (props) => {
                   _deleteToDo={props._deleteToDo}
                   _editToDo={props._editToDo}
                   _saveChanges={props._saveChanges}
+                  _cancelChanges={props._cancelChanges}
                   _updateValue={props._updateValue}
                   editData={props.editData}
                 />
@@ -54,6 +55,7 @@ ToDoTable.propTypes = {
   _deleteToDo: PropTypes.func,
   _editToDo: PropTypes.func,
   _saveChanges: PropTypes.func,
+  _cancelChanges: PropTypes.func,
   _updateValue: PropTypes.func,
   editData: PropTypes.object
 }

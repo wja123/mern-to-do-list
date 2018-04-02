@@ -41,7 +41,7 @@ function updateAListValue (state, action) {
 
 function removeToDo (state, action) {
   let listObject = Object.assign({}, state)
-  let delIndex
+  let delIndex = -1
   for (let i = 0, len = listObject.list.length; i < len; i++) {
     if (listObject.list[i]._id === action.value._id) {
       delIndex = i
@@ -49,7 +49,7 @@ function removeToDo (state, action) {
     }
   }
 
-  if (delIndex) {
+  if (delIndex > -1) {
     listObject.list.splice(delIndex, 1)
   }
 
