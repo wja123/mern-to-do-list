@@ -2,10 +2,10 @@ import React from 'react'
 import { Table } from 'react-materialize'
 import PropTypes from 'prop-types'
 import { TableRow } from './TableRow'
+import { TableRowEdit } from './TableRowEdit'
 // import { Row, Col, Input, Button } from 'react-materialize'
 
 export const ToDoTable = (props) => {
-  console.log(props)
   return (
     <div style={{ display: 'flex', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
       <div style={{ display: 'flex', width: '80%', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
@@ -22,7 +22,24 @@ export const ToDoTable = (props) => {
           </thead>
           <tbody>
             {props.toDoList.map(x => (
-              <TableRow key={x._id} data={x} _setComplete={props._setComplete} _deleteToDo={props._deleteToDo} _editToDo={props._editToDo}/>
+              x._id === props.editData._id
+                ? <TableRowEdit
+                  key={x._id}
+                  data={props.editData}
+                  _setComplete={props._setComplete}
+                  _deleteToDo={props._deleteToDo}
+                  _editToDo={props._editToDo}
+                  _saveChanges={props._saveChanges}
+                  _updateValue={props._updateValue}
+                  editData={props.editData}
+                />
+                : <TableRow
+                  key={x._id}
+                  data={x}
+                  _setComplete={props._setComplete}
+                  _deleteToDo={props._deleteToDo}
+                  _editToDo={props._editToDo}
+                />
             ))}
           </tbody>
         </Table>
@@ -35,5 +52,8 @@ ToDoTable.propTypes = {
   toDoList: PropTypes.array,
   _setComplete: PropTypes.func,
   _deleteToDo: PropTypes.func,
-  _editToDo: PropTypes.func
+  _editToDo: PropTypes.func,
+  _saveChanges: PropTypes.func,
+  _updateValue: PropTypes.func,
+  editData: PropTypes.object
 }

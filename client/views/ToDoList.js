@@ -12,6 +12,7 @@ class ToDoList extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      editId: '',
       list: [],
       todo: {
         _id: '',
@@ -26,6 +27,7 @@ class ToDoList extends Component {
     this._setComplete = this._setComplete.bind(this)
     this._deleteToDo = this._deleteToDo.bind(this)
     this._editToDo = this._editToDo.bind(this)
+    this._saveChanges = this._saveChanges.bind(this)
   }
   componentWillMount () {
     axios.get('/todo/').then(response => {
@@ -77,13 +79,25 @@ class ToDoList extends Component {
       console.log(err)
     })
   }
-  _editToDo (toDo) {
-    console.log(toDo)
-    // axios.delete('/todo/' + toDo._id).then(response => {
-    //   this.props.removeToDo(response.data)
-    // }).catch(err => {
-    //   console.log(err)
-    // })
+  _editToDo (todo) {
+    let todoObj = Object.assign({}, this.state.todo, todo)
+    delete todoObj._v
+    this.setState({ todo: todoObj, editId: todo._id })
+  }
+  _saveChanges () {
+    axios.put('/todo/' + this.state.todo._id, this.state.todo).then(response => {
+      this.props.updateAListValue(response.data)
+      this.setState({todo: {
+        _id: '',
+        todo: '',
+        due: '',
+        created: '',
+        completed: false
+      },
+      editId: ''})
+    }).catch(err => {
+      console.log(err)
+    })
   }
   render () {
     return (
@@ -92,7 +106,14 @@ class ToDoList extends Component {
           <h1 style={{ fontWeight: 200, color: 'white' }}>To Do list</h1>
         </div>
         <ToDoAdd _addToDo={this._addToDo} _updateValue={this._updateValue}/>
-        <ToDoTable toDoList={this.props.ListState.list} _setComplete={this._setComplete} _deleteToDo={this._deleteToDo} _editToDo={this._editToDo}/>
+        <ToDoTable
+          toDoList={this.props.ListState.list}
+          _setComplete={this._setComplete}
+          _deleteToDo={this._deleteToDo}
+          _editToDo={this._editToDo}
+          _saveChanges={this._saveChanges}
+          _updateValue={this._updateValue}
+          editData={this.state.todo}/>
       </div>
     )
   }
