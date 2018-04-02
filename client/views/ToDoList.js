@@ -140,7 +140,7 @@ class ToDoList extends Component {
     return (
       <div style={{ display: 'flex', flex: 1, height: '100%', width: '100%', alignItems: 'center', flexDirection: 'column' }}>
         <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'center', background: 'coral' }}>
-          <h1 style={{ fontWeight: 200, color: 'white' }}>To Do list</h1>
+          <h1 style={{ fontWeight: 200, color: 'white' }}>To-Do list</h1>
         </div>
         <ToDoAdd _addToDo={this._addToDo} _updateValue={this._updateValue} addValue={this.state.todo}/>
         { this.state.loading

@@ -1,4 +1,4 @@
-## Built a to do list using MongoDB, Expressjs, Reactjs and Nodejs
+## A to-do list app using MongoDB, Expressjs, Reactjs and Nodejs
 
 A demo version is hosted on Heroku [here.](https://merrn-todo.herokuapp.com/)
 
