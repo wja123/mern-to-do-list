@@ -31,8 +31,9 @@ export const ToDoTable = (props) => {
                   _editToDo={props._editToDo}
                   _saveChanges={props._saveChanges}
                   _cancelChanges={props._cancelChanges}
-                  _updateValue={props._updateValue}
+                  _updateEditValue={props._updateEditValue}
                   editData={props.editData}
+                  editTodo={props.editTodo}
                 />
                 : <TableRow
                   key={x._id}
@@ -56,6 +57,7 @@ ToDoTable.propTypes = {
   _editToDo: PropTypes.func,
   _saveChanges: PropTypes.func,
   _cancelChanges: PropTypes.func,
-  _updateValue: PropTypes.func,
-  editData: PropTypes.object
+  _updateEditValue: PropTypes.func,
+  editData: PropTypes.object,
+  editTodo: PropTypes.object
 }

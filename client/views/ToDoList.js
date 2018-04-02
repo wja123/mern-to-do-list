@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import moment from 'moment'
-import Loader from 'react-loaders'
 import { ToDoAdd } from '../components/ToDoAdd'
 import { ToDoTable } from '../components/ToDoTable'
 import PropTypes from 'prop-types'
@@ -22,10 +21,18 @@ class ToDoList extends Component {
         due: '',
         created: '',
         completed: false
+      },
+      editTodo: {
+        _id: '',
+        todo: '',
+        due: '',
+        created: '',
+        completed: false
       }
     }
     this._addToDo = this._addToDo.bind(this)
     this._updateValue = this._updateValue.bind(this)
+    this._updateEditValue = this._updateEditValue.bind(this)
     this._setComplete = this._setComplete.bind(this)
     this._deleteToDo = this._deleteToDo.bind(this)
     this._editToDo = this._editToDo.bind(this)
@@ -68,6 +75,11 @@ class ToDoList extends Component {
     stateObj[e.target.name] = e.target.value
     this.setState({todo: stateObj})
   }
+  _updateEditValue (e) {
+    let stateObj = Object.assign({}, this.state.editTodo)
+    stateObj[e.target.name] = e.target.value
+    this.setState({editTodo: stateObj})
+  }
   _setComplete (toDo) {
     this.setState({ loading: true })
     toDo.completed = !toDo.completed
@@ -91,14 +103,15 @@ class ToDoList extends Component {
     }
   }
   _editToDo (todo) {
+    console.log(todo)
     if (todo) {
-      let todoObj = Object.assign({}, this.state.todo, todo)
+      let todoObj = Object.assign({}, this.state.editTodo, todo)
       delete todoObj._v
-      this.setState({ todo: todoObj })
+      this.setState({ editTodo: todoObj })
     }
   }
   _cancelChanges (todo) {
-    this.setState({todo: {
+    this.setState({editTodo: {
       _id: '',
       todo: '',
       due: '',
@@ -108,9 +121,9 @@ class ToDoList extends Component {
   }
   _saveChanges () {
     this.setState({ loading: true })
-    axios.put('/todo/' + this.state.todo._id, this.state.todo).then(response => {
+    axios.put('/todo/' + this.state.editTodo._id, this.state.editTodo).then(response => {
       this.props.updateAListValue(response.data)
-      this.setState({todo: {
+      this.setState({editTodo: {
         _id: '',
         todo: '',
         due: '',
@@ -129,18 +142,20 @@ class ToDoList extends Component {
         <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'center', background: 'coral' }}>
           <h1 style={{ fontWeight: 200, color: 'white' }}>To Do list</h1>
         </div>
-        <ToDoAdd _addToDo={this._addToDo} _updateValue={this._updateValue}/>
+        <ToDoAdd _addToDo={this._addToDo} _updateValue={this._updateValue} addValue={this.state.todo}/>
         { this.state.loading
-          ? <Loader type="line-scale" active />
+          ? <img src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif" />
           : <ToDoTable
             toDoList={this.props.ListState.list}
             _setComplete={this._setComplete}
             _deleteToDo={this._deleteToDo}
+            editTodo={this._editTodo}
             _editToDo={this._editToDo}
             _saveChanges={this._saveChanges}
             _cancelChanges={this._cancelChanges}
             _updateValue={this._updateValue}
-            editData={this.state.todo}/>
+            _updateEditValue={this._updateEditValue}
+            editData={this.state.editTodo}/>
         }
       </div>
     )
