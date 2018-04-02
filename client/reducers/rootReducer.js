@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import { ListReducer } from './ListReducer'
-import { ToDoReducer } from './ToDoReducer'
+import { ListState } from './ListState'
+import { ToDoState } from './ToDoState'
 
-export const rootReducer = combineReducers({ ListReducer, ToDoReducer })
+export const rootReducer = combineReducers({ ListState, ToDoState })

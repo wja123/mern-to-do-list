@@ -1,8 +1,11 @@
 import React from 'react'
-import { Table, Icon } from 'react-materialize'
+import { Table } from 'react-materialize'
+import PropTypes from 'prop-types'
+import { TableRow } from './TableRow'
 // import { Row, Col, Input, Button } from 'react-materialize'
 
 export const ToDoTable = (props) => {
+  console.log(props)
   return (
     <div style={{ display: 'flex', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
       <div style={{ display: 'flex', width: '80%', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
@@ -14,19 +17,23 @@ export const ToDoTable = (props) => {
               <th style={{textAlign: 'center'}} data-field="due">Due</th>
               <th style={{textAlign: 'center'}} data-field="edit">Edit</th>
               <th style={{textAlign: 'center'}} data-field="completed">Complete</th>
+              <th style={{textAlign: 'center'}} data-field="remove">Remove</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td style={{textAlign: 'center'}}>Alvin</td>
-              <td style={{textAlign: 'center'}}>Eclair</td>
-              <td style={{textAlign: 'center'}}>$0.87</td>
-              <td style={{textAlign: 'center'}}><Icon tiny>mode_edit</Icon></td>
-              <td style={{textAlign: 'center'}}><input style={{position: 'relative', left: 0, opacity: 1}} type='checkbox' value={true}/></td>
-            </tr>
+            {props.toDoList.map(x => (
+              <TableRow key={x._id} data={x} _setComplete={props._setComplete} _deleteToDo={props._deleteToDo} _editToDo={props._editToDo}/>
+            ))}
           </tbody>
         </Table>
       </div>
     </div>
   )
+}
+
+ToDoTable.propTypes = {
+  toDoList: PropTypes.array,
+  _setComplete: PropTypes.func,
+  _deleteToDo: PropTypes.func,
+  _editToDo: PropTypes.func
 }

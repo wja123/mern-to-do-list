@@ -11,6 +11,7 @@ app.get('/', (req, res) => {
 })
 
 app.post('/', (req, res) => {
+  console.log(req.body);
   var todo = new ToDo(req.body);
   todo.save(err => {
     if(err){

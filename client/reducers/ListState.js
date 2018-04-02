@@ -1,6 +1,6 @@
-import { toDoState } from '../constants/initialStates'
+import { listState } from '../constants/initialStates'
 
-export const ListReducer = (state = toDoState, action) => {
+export const ListState = (state = listState, action) => {
   switch (action.type) {
     case 'ADD_TO_TO_DO_LIST':
       return addToToDoList(state, action)
@@ -29,7 +29,7 @@ function updateList (state, action) {
 
 function updateAListValue (state, action) {
   let listObject = Object.assign({}, state)
-  listObject = listObject.list.map((x) => {
+  listObject.list = listObject.list.map((x) => {
     if (x._id === action.value._id) {
       return action.value
     } else {
@@ -50,7 +50,7 @@ function removeToDo (state, action) {
   }
 
   if (delIndex) {
-    listObject.list = listObject.list.splice(delIndex, 1)
+    listObject.list.splice(delIndex, 1)
   }
 
   return listObject

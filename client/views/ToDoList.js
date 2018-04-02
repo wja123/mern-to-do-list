@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import moment from 'moment'
 import { ToDoAdd } from '../components/ToDoAdd'
 import { ToDoTable } from '../components/ToDoTable'
 import PropTypes from 'prop-types'
@@ -13,6 +14,7 @@ class ToDoList extends Component {
     this.state = {
       list: [],
       todo: {
+        _id: '',
         todo: '',
         due: '',
         created: '',
@@ -20,6 +22,10 @@ class ToDoList extends Component {
       }
     }
     this._addToDo = this._addToDo.bind(this)
+    this._updateValue = this._updateValue.bind(this)
+    this._setComplete = this._setComplete.bind(this)
+    this._deleteToDo = this._deleteToDo.bind(this)
+    this._editToDo = this._editToDo.bind(this)
   }
   componentWillMount () {
     axios.get('/todo/').then(response => {
@@ -30,7 +36,54 @@ class ToDoList extends Component {
     })
   }
   _addToDo () {
-    console.log('addToDo')
+    if (this.state.todo.todo !== '' && this.state.todo.due !== '') {
+      let newToDo = Object.assign({}, this.state.todo, { created: Date.now(), completed: false }, {due: moment(this.state.todo.due, 'YYYY-MM-DD').format()})
+      this.setState({ todo: newToDo })
+      delete newToDo._id
+
+      axios.post('/todo/', newToDo).then(response => {
+        this.props.addToToDoList(response.data)
+        this.props.updateToDo(response.data)
+        this.setState({todo: {
+          _id: '',
+          todo: '',
+          due: '',
+          created: '',
+          completed: false
+        }})
+      }).catch(err => {
+        console.log(err)
+      })
+    }
+  }
+  _updateValue (e) {
+    let stateObj = Object.assign({}, this.state.todo)
+    stateObj[e.target.name] = e.target.value
+    this.setState({todo: stateObj})
+  }
+  _setComplete (toDo) {
+    toDo.completed = !toDo.completed
+    axios.put('/todo/' + toDo._id, toDo).then(response => {
+      this.props.updateAListValue(response.data)
+      this.props.updateToDo(response.data)
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+  _deleteToDo (toDo) {
+    axios.delete('/todo/' + toDo._id).then(response => {
+      this.props.removeToDo(response.data)
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+  _editToDo (toDo) {
+    console.log(toDo)
+    // axios.delete('/todo/' + toDo._id).then(response => {
+    //   this.props.removeToDo(response.data)
+    // }).catch(err => {
+    //   console.log(err)
+    // })
   }
   render () {
     return (
@@ -38,17 +91,17 @@ class ToDoList extends Component {
         <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'center', background: 'coral' }}>
           <h1 style={{ fontWeight: 200, color: 'white' }}>To Do list</h1>
         </div>
-        <ToDoAdd _addToDo={this._addToDo}/>
-        <ToDoTable />
+        <ToDoAdd _addToDo={this._addToDo} _updateValue={this._updateValue}/>
+        <ToDoTable toDoList={this.props.ListState.list} _setComplete={this._setComplete} _deleteToDo={this._deleteToDo} _editToDo={this._editToDo}/>
       </div>
     )
   }
 }
 
 ToDoList.propTypes = {
-  ToDoReducer: PropTypes.object,
-  ListReducer: PropTypes.object,
-  onSelectToDo: PropTypes.func,
+  ToDoState: PropTypes.object,
+  ListState: PropTypes.object,
+  updateToDo: PropTypes.func,
   addToToDoList: PropTypes.func,
   updateList: PropTypes.func,
   updateAListValue: PropTypes.func,
@@ -56,12 +109,12 @@ ToDoList.propTypes = {
 }
 
 const mapStateToProps = (state, rrProps) => ({
-  ToDoReducer: state.ToDoReducer,
-  ListReducer: state.ListReducer
+  ToDoState: state.ToDoState,
+  ListState: state.ListState
 })
 
 const mapDispatchToProps = dispatch => ({
-  onSelectToDo: toDo => {
+  updateToDo: toDo => {
     dispatch(updateToDo(toDo))
   },
   addToToDoList: toDo => {
