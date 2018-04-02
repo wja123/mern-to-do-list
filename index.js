@@ -10,7 +10,7 @@ var bodyParser = require('body-parser')
 var ToDo = require('./routes/todo')
 
 const PORT = process.env.PORT || 3000;
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost/merrntodo';
+const MONGO_URI = process.env.MONGODB_URI || 'mongodb://localhost/merrntodo';
 
 var app = express()
 
